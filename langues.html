@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LinguaHub — Ressources pour apprendre les langues</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream:   #F5F0E8;
+      --ink:     #1A1612;
+      --rust:    #C4522A;
+      --sage:    #4A6741;
+      --sand:    #D9C9A8;
+      --muted:   #7A6E62;
+      --card-bg: #FFFDF8;
+      --border:  #E2D9C8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: .6;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: var(--ink);
+      padding: 1rem 2rem;
+      position: sticky; top: 0; z-index: 100;
+      border-bottom: 2px solid var(--rust);
+    }
+    .navbar-brand {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 1.6rem;
+      color: var(--cream) !important;
+      letter-spacing: -.5px;
+    }
+    .navbar-brand span { color: var(--rust); }
+    .nav-link {
+      color: var(--sand) !important;
+      font-size: .85rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: color .2s;
+      padding: .4rem .9rem !important;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--rust) !important; }
+    .navbar-toggler { border-color: var(--sand); }
+    .navbar-toggler-icon { filter: invert(1); }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 5rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: 'LANGUE';
+      position: absolute;
+      right: -2rem; bottom: -1.5rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 14rem;
+      font-weight: 900;
+      color: rgba(255,255,255,.04);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: var(--rust);
+      color: #fff;
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      padding: .25rem .75rem;
+      border-radius: 2px;
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 em { color: var(--rust); font-style: normal; }
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--sand);
+      max-width: 520px;
+      margin-bottom: 2rem;
+    }
+    .hero-langs {
+      display: flex; gap: .7rem; flex-wrap: wrap;
+    }
+    .hero-lang {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--sand);
+      font-size: .8rem;
+      letter-spacing: .05em;
+      padding: .3rem .9rem;
+      border-radius: 99px;
+      backdrop-filter: blur(4px);
+    }
+    .hero-stat {
+      text-align: center;
+      border-left: 1px solid rgba(255,255,255,.1);
+      padding-left: 2rem;
+    }
+    .hero-stat .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--rust);
+      line-height: 1;
+    }
+    .hero-stat .lbl { font-size: .75rem; color: var(--sand); letter-spacing: .08em; text-transform: uppercase; }
+
+    /* ── SECTION TITLES ── */
+    .section-label {
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: .5rem;
+      display: block;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: .5rem;
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: .95rem;
+      margin-bottom: 2.5rem;
+    }
+    .divider {
+      width: 48px; height: 3px;
+      background: var(--rust);
+      margin: .9rem 0 1.5rem;
+    }
+
+    /* ── LANGUAGE TABS ── */
+    .lang-tabs { gap: .5rem; border-bottom: 2px solid var(--border); flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .lang-tab {
+      background: none; border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .85rem; font-weight: 500;
+      letter-spacing: .06em; text-transform: uppercase;
+      color: var(--muted);
+      padding: .6rem 1.2rem;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      transition: color .2s, border-color .2s;
+    }
+    .lang-tab:hover { color: var(--ink); }
+    .lang-tab.active { color: var(--rust); border-bottom-color: var(--rust); }
+    .lang-flag { margin-right: .4rem; font-size: 1rem; }
+
+    /* ── VOCAB CARD ── */
+    .vocab-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: .8rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .vocab-card:hover { box-shadow: 4px 4px 0 var(--rust); transform: translate(-2px,-2px); }
+    .vocab-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--border);
+      min-width: 2.2rem;
+      text-align: right;
+    }
+    .vocab-word {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink);
+      min-width: 140px;
+    }
+    .vocab-trans {
+      color: var(--muted);
+      font-size: .9rem;
+      flex: 1;
+    }
+    .vocab-badge {
+      font-size: .65rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .25rem .6rem;
+      border-radius: 3px;
+    }
+    .badge-noun { background: #EAF2E3; color: var(--sage); }
+    .badge-verb { background: #FDE8DF; color: var(--rust); }
+    .badge-adj  { background: #E8EFF9; color: #3A5FA0; }
+    .badge-phrase { background: #F5ECD7; color: #8A6530; }
+
+    /* ── GRAMMAR CARD ── */
+    .grammar-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      transition: box-shadow .2s;
+    }
+    .grammar-card:hover { box-shadow: 4px 4px 0 var(--sage); }
+    .grammar-header {
+      background: var(--ink);
+      color: var(--cream);
+      padding: .8rem 1.4rem;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer;
+    }
+    .grammar-header h6 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0;
+    }
+    .grammar-header .level {
+      font-size: .65rem; letter-spacing: .12em; text-transform: uppercase;
+      background: var(--rust); color: #fff; padding: .2rem .6rem; border-radius: 2px;
+    }
+    .grammar-body { padding: 1.2rem 1.4rem; }
+    .grammar-body p { font-size: .9rem; color: var(--muted); margin-bottom: .8rem; }
+    .grammar-example {
+      background: var(--cream);
+      border-left: 3px solid var(--sage);
+      padding: .6rem 1rem;
+      font-style: italic;
+      font-size: .9rem;
+      color: var(--ink);
+      margin-bottom: .5rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .grammar-example span { color: var(--muted); font-style: normal; font-size: .82rem; display: block; margin-top: .2rem; }
+
+    /* ── RESOURCE LINK CARD ── */
+    .res-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.4rem 1.5rem;
+      height: 100%;
+      display: flex; flex-direction: column;
+      transition: box-shadow .2s, transform .2s;
+      text-decoration: none; color: inherit;
+    }
+    .res-card:hover { box-shadow: 4px 4px 0 var(--rust); transform: translate(-2px,-2px); color: inherit; }
+    .res-icon {
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+    .res-card h6 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: .4rem;
+    }
+    .res-card p { font-size: .85rem; color: var(--muted); flex: 1; margin-bottom: .9rem; }
+    .res-link {
+      font-size: .75rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--rust);
+      display: flex; align-items: center; gap: .3rem;
+    }
+
+    /* ── DOWNLOAD CARD ── */
+    .dl-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.2rem 1.5rem;
+      display: flex; align-items: center; gap: 1.2rem;
+      transition: box-shadow .2s, transform .2s;
+      cursor: pointer;
+    }
+    .dl-card:hover { box-shadow: 4px 4px 0 var(--sage); transform: translate(-2px,-2px); }
+    .dl-icon {
+      width: 48px; height: 48px; flex-shrink: 0;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      color: var(--rust);
+    }
+    .dl-info h6 {
+      font-weight: 500; font-size: .95rem; margin-bottom: .15rem;
+    }
+    .dl-info small { color: var(--muted); font-size: .78rem; }
+    .dl-btn {
+      margin-left: auto;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      border-radius: 4px;
+      padding: .4rem .9rem;
+      font-size: .75rem; font-weight: 500;
+      letter-spacing: .08em; text-transform: uppercase;
+      cursor: pointer;
+      transition: background .2s;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: .3rem;
+    }
+    .dl-btn:hover { background: var(--rust); color: #fff; }
+
+    /* ── PROGRESS BAR ── */
+    .prog-label { display: flex; justify-content: space-between; font-size: .8rem; margin-bottom: .3rem; }
+    .prog-bar-wrap { height: 6px; background: var(--border); border-radius: 99px; margin-bottom: 1rem; overflow: hidden; }
+    .prog-bar-fill { height: 100%; border-radius: 99px; background: var(--rust); }
+
+    /* ── TIP BOX ── */
+    .tip-box {
+      background: var(--ink);
+      color: var(--cream);
+      border-radius: 6px;
+      padding: 1.5rem 1.8rem;
+      position: relative; overflow: hidden;
+    }
+    .tip-box::before {
+      content: '"';
+      position: absolute; top: -1.5rem; left: 1rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 8rem; font-weight: 900;
+      color: rgba(255,255,255,.06);
+      line-height: 1;
+    }
+    .tip-box h6 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--rust); margin-bottom: .6rem;
+    }
+    .tip-box p { font-size: .88rem; color: var(--sand); line-height: 1.6; margin: 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: var(--sand);
+      padding: 3rem 0 1.5rem;
+      margin-top: 5rem;
+      border-top: 2px solid var(--rust);
+    }
+    footer .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 900;
+      color: var(--cream);
+    }
+    footer .brand span { color: var(--rust); }
+    footer p { font-size: .85rem; line-height: 1.6; max-width: 340px; color: var(--muted); }
+    footer a { color: var(--sand); text-decoration: none; font-size: .85rem; transition: color .2s; display: block; margin-bottom: .4rem; }
+    footer a:hover { color: var(--rust); }
+    footer h6 { font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); margin-top: 2rem; padding-top: 1.2rem; font-size: .75rem; color: var(--muted); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 576px) {
+      .hero { padding: 3rem 0 2.5rem; }
+      .hero::after { display: none; }
+      .hero-stat { border-left: none; border-top: 1px solid rgba(255,255,255,.1); padding: 1rem 0 0; margin-top: 1rem; }
+      .vocab-word { min-width: unset; }
+      .dl-btn span { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="#">Lingua<span>Hub</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto gap-1">
+        <li class="nav-item"><a class="nav-link active" href="#vocabulaire">Vocabulaire</a></li>
+        <li class="nav-item"><a class="nav-link" href="#grammaire">Grammaire</a></li>
+        <li class="nav-item"><a class="nav-link" href="#ressources">Ressources</a></li>
+        <li class="nav-item"><a class="nav-link" href="#telechargements">Téléchargements</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center gy-4">
+      <div class="col-lg-8">
+        <span class="hero-tag">Plateforme d'apprentissage</span>
+        <h1>Maîtrisez une <em>nouvelle</em><br/>langue, à votre rythme.</h1>
+        <p>Vocabulaire, grammaire, liens externes et documents téléchargeables — toutes les ressources dont vous avez besoin, réunies en un seul endroit.</p>
+        <div class="hero-langs">
+          <span class="hero-lang">🇬🇧 Anglais</span>
+          <span class="hero-lang">🇪🇸 Espagnol</span>
+          <span class="hero-lang">🇩🇪 Allemand</span>
+          <span class="hero-lang">🇮🇹 Italien</span>
+          <span class="hero-lang">🇯🇵 Japonais</span>
+          <span class="hero-lang">🇧🇷 Portugais</span>
+        </div>
+      </div>
+      <div class="col-lg-4 d-flex gap-4 justify-content-lg-end">
+        <div class="hero-stat">
+          <div class="num">6+</div>
+          <div class="lbl">Langues</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">200+</div>
+          <div class="lbl">Ressources</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">40+</div>
+          <div class="lbl">Documents</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container py-5">
+
+  <!-- ═══ VOCABULAIRE ═══ -->
+  <section id="vocabulaire" class="mb-5 reveal">
+    <span class="section-label">01 — Vocabulaire</span>
+    <h2 class="section-title">Listes de vocabulaire</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Sélectionnez une langue pour explorer le vocabulaire essentiel classé par thème et niveau.</p>
+
+    <!-- Lang tabs -->
+    <div class="d-flex lang-tabs mb-0">
+      <button class="lang-tab active" onclick="switchLang(this,'en')"><span class="lang-flag">🇬🇧</span>Anglais</button>
+      <button class="lang-tab" onclick="switchLang(this,'es')"><span class="lang-flag">🇪🇸</span>Espagnol</button>
+      <button class="lang-tab" onclick="switchLang(this,'de')"><span class="lang-flag">🇩🇪</span>Allemand</button>
+      <button class="lang-tab" onclick="switchLang(this,'it')"><span class="lang-flag">🇮🇹</span>Italien</button>
+    </div>
+
+    <div class="row g-0 mt-3">
+      <div class="col-lg-8">
+        <!-- Anglais -->
+        <div class="lang-content" id="vocab-en">
+          <div class="vocab-card"><span class="vocab-num">01</span><span class="vocab-word">Hello</span><span class="vocab-trans">Bonjour / Salut</span><span class="vocab-badge badge-phrase">Expression</span></div>
+          <div class="vocab-card"><span class="vocab-num">02</span><span class="vocab-word">To speak</span><span class="vocab-trans">Parler</span><span class="vocab-badge badge-verb">Verbe</span></div>
+          <div class="vocab-card"><span class="vocab-num">03</span><span class="vocab-word">Knowledge</span><span class="vocab-trans">Connaissance, savoir</span><span class="vocab-badge badge-noun">Nom</span></div>
+          <div class="vocab-card"><span class="vocab-num">04</span><span class="vocab-word">Fluent</span><span class="vocab-trans">Courant, aisé (en langue)</span><span class="vocab-badge badge-adj">Adjectif</span></div>
+          <div class="vocab-card"><span class="vocab-num">05</span><span class="vocab-word">To understand</span><span class="vocab-trans">Comprendre</span><span class="vocab-badge badge-verb">Verbe</span></div>
+          <div class="vocab-card"><span class="vocab-num">06</span><span class="vocab-word">Dictionary</span><span class="vocab-trans">Dictionnaire</span><span class="vocab-badge badge-noun">Nom</span></div>
+        </div>
+        <!-- Espagnol -->
+        <div class="lang-content d-none" id="vocab-es">
+          <div class="vocab-card"><span class="vocab-num">01</span><span class="vocab-word">Hola</span><span class="vocab-trans">Bonjour / Salut</span><span class="vocab-badge badge-phrase">Expression</span></div>
+          <div class="vocab-card"><span class="vocab-num">02</span><span class="vocab-word">Hablar</span><span class="vocab-trans">Parler</span><span class="vocab-badge badge-verb">Verbe</span></div>
+          <div class="vocab-card"><span class="vocab-num">03</span><span class="vocab-word">Conocimiento</span><span class="vocab-trans">Connaissance, savoir</span><span class="vocab-badge badge-noun">Nom</span></div>
+          <div class="vocab-card"><span class="vocab-num">04</span><span class="vocab-word">Fluido</span><span class="vocab-trans">Courant, aisé</span><span class="vocab-badge badge-adj">Adjectif</span></div>
+          <div class="vocab-card"><span class="vocab-num">05</span><span class="vocab-word">Entender</span><span class="vocab-trans">Comprendre</span><span class="vocab-badge badge-verb">Verbe</span></div>
+          <div class="vocab-card"><span class="vocab-num">06</span><span class="vocab-word">Diccionario</span><span class="vocab-trans">Dictionnaire</span><span class="vocab-badge badge-noun">Nom</span></div>
+        </div>
+        <!-- Allemand -->
+        <div class="lang-content d-none" id="vocab-de">
+          <div class="vocab-card"><span class="vocab-num">01</span><span class="vocab-word">Hallo</span><span class="vocab-trans">Bonjour / Salut</span><span class="vocab-badge badge-phrase">Expression</span></div>
+          <div class="vocab-card"><span class="vocab-num">02</span><span class="vocab-word">Sprechen</span><span class="vocab-trans">Parler</span><span class="vocab-badge badge-verb">Verbe</span></div>
+          <div class="vocab-card"><span class="vocab-num">03</span><span class="vocab-word">Wissen</span><span class="vocab-trans">Connaissance, savoir</span><span class="vocab-badge badge-noun">Nom</span></div>
+          <div class="vocab-card"><span class="vocab-num">04</span><span class="vocab-word">Fließend</span><span class="vocab-trans">Courant, aisé</span><span class="vocab-badge badge-adj">Adjectif</span></div>
+          <div class="vocab-card"><span class="vocab-num">05</span><span class="vocab-word">Verstehen</span><span class="vocab-trans">Comprendre</span><span class="vocab-badge badge-verb">Verbe</span></div>
+          <div class="vocab-card"><span class="vocab-num">06</span><span class="vocab-word">Wörterbuch</span><span class="vocab-trans">Dictionnaire</span><span class="vocab-badge badge-noun">Nom</span></div>
+        </div>
+        <!-- Italien -->
+        <div class="lang-content d-none" id="vocab-it">
+          <div class="vocab-card"><span class="vocab-num">01</span><span class="vocab-word">Ciao</span><span class="vocab-trans">Bonjour / Salut</span><span class="vocab-badge badge-phrase">Expression</span></div>
+          <div class="vocab-card"><span class="vocab-num">02</span><span class="vocab-word">Parlare</span><span class="vocab-trans">Parler</span><span class="vocab-badge badge-verb">Verbe</span></div>
+          <div class="vocab-card"><span class="vocab-num">03</span><span class="vocab-word">Conoscenza</span><span class="vocab-trans">Connaissance, savoir</span><span class="vocab-badge badge-noun">Nom</span></div>
+          <div class="vocab-card"><span class="vocab-num">04</span><span class="vocab-word">Fluente</span><span class="vocab-trans">Courant, aisé</span><span class="vocab-badge badge-adj">Adjectif</span></div>
+          <div class="vocab-card"><span class="vocab-num">05</span><span class="vocab-word">Capire</span><span class="vocab-trans">Comprendre</span><span class="vocab-badge badge-verb">Verbe</span></div>
+          <div class="vocab-card"><span class="vocab-num">06</span><span class="vocab-word">Dizionario</span><span class="vocab-trans">Dictionnaire</span><span class="vocab-badge badge-noun">Nom</span></div>
+        </div>
+      </div>
+      <div class="col-lg-4 ps-lg-4 pt-3 pt-lg-0">
+        <!-- Progression -->
+        <div class="tip-box mb-3">
+          <h6><i class="bi bi-lightbulb me-1"></i>Conseil du jour</h6>
+          <p>Apprenez 5 nouveaux mots par jour et révisez-les à intervalles croissants (1 jour, 3 jours, 7 jours). Cette technique de répétition espacée ancre le vocabulaire durablement.</p>
+        </div>
+        <div class="p-3" style="background:var(--card-bg);border:1px solid var(--border);border-radius:6px;">
+          <p class="section-label mb-2">Progression thématique</p>
+          <div class="prog-label"><span>Salutations</span><span style="color:var(--rust)">90%</span></div>
+          <div class="prog-bar-wrap"><div class="prog-bar-fill" style="width:90%"></div></div>
+          <div class="prog-label"><span>Voyages</span><span style="color:var(--rust)">65%</span></div>
+          <div class="prog-bar-wrap"><div class="prog-bar-fill" style="width:65%"></div></div>
+          <div class="prog-label"><span>Travail & Affaires</span><span style="color:var(--rust)">42%</span></div>
+          <div class="prog-bar-wrap"><div class="prog-bar-fill" style="width:42%"></div></div>
+          <div class="prog-label"><span>Culture & Arts</span><span style="color:var(--rust)">28%</span></div>
+          <div class="prog-bar-wrap"><div class="prog-bar-fill" style="width:28%"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr style="border-color:var(--border); margin: 3rem 0;"/>
+
+  <!-- ═══ GRAMMAIRE ═══ -->
+  <section id="grammaire" class="mb-5 reveal">
+    <span class="section-label">02 — Grammaire</span>
+    <h2 class="section-title">Règles essentielles</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Les points grammaticaux incontournables, avec exemples et explications claires.</p>
+
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="grammar-card">
+          <div class="grammar-header">
+            <h6>Les articles définis & indéfinis</h6>
+            <span class="level">A1 — Débutant</span>
+          </div>
+          <div class="grammar-body">
+            <p>En anglais, «&nbsp;the&nbsp;» (défini) et «&nbsp;a / an&nbsp;» (indéfini). Contrairement au français, ils ne varient pas selon le genre.</p>
+            <div class="grammar-example">The book is on the table.<span>→ Le livre est sur la table.</span></div>
+            <div class="grammar-example">I saw a movie last night.<span>→ J'ai regardé un film hier soir.</span></div>
+          </div>
+        </div>
+        <div class="grammar-card">
+          <div class="grammar-header">
+            <h6>Le present perfect</h6>
+            <span class="level">B1 — Intermédiaire</span>
+          </div>
+          <div class="grammar-body">
+            <p>Structure : <strong>have / has + participe passé</strong>. Exprime une action passée avec un lien au présent ou sans moment précis.</p>
+            <div class="grammar-example">I have visited Paris three times.<span>→ J'ai visité Paris trois fois.</span></div>
+            <div class="grammar-example">She has just finished her homework.<span>→ Elle vient de terminer ses devoirs.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="grammar-card">
+          <div class="grammar-header">
+            <h6>Les comparatifs & superlatifs</h6>
+            <span class="level">A2 — Élémentaire</span>
+          </div>
+          <div class="grammar-body">
+            <p>Adjectifs courts → <strong>-er / -est</strong>. Adjectifs longs → <strong>more / most</strong>.</p>
+            <div class="grammar-example">This book is more interesting than the other.<span>→ Ce livre est plus intéressant que l'autre.</span></div>
+            <div class="grammar-example">She is the tallest in her class.<span>→ Elle est la plus grande de sa classe.</span></div>
+          </div>
+        </div>
+        <div class="grammar-card">
+          <div class="grammar-header">
+            <h6>Les modaux : can, could, would, should</h6>
+            <span class="level">B1 — Intermédiaire</span>
+          </div>
+          <div class="grammar-body">
+            <p>Les modaux s'utilisent sans «&nbsp;to&nbsp;» et ne se conjuguent pas. Ils expriment la capacité, la possibilité, la politesse ou le conseil.</p>
+            <div class="grammar-example">You should study every day.<span>→ Tu devrais étudier chaque jour.</span></div>
+            <div class="grammar-example">Could you help me, please?<span>→ Pourriez-vous m'aider, s'il vous plaît ?</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr style="border-color:var(--border); margin: 3rem 0;"/>
+
+  <!-- ═══ RESSOURCES EXTERNES ═══ -->
+  <section id="ressources" class="mb-5 reveal">
+    <span class="section-label">03 — Liens utiles</span>
+    <h2 class="section-title">Ressources externes</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Une sélection des meilleurs sites et applications pour progresser rapidement.</p>
+
+    <div class="row g-3">
+      <div class="col-md-6 col-lg-4">
+        <a href="https://www.duolingo.com" target="_blank" class="res-card">
+          <div class="res-icon" style="background:#EAF2E3;color:var(--sage)"><i class="bi bi-mortarboard-fill"></i></div>
+          <h6>Duolingo</h6>
+          <p>Apprentissage ludique et quotidien avec des exercices courts et gamifiés. Idéal pour maintenir une routine d'entraînement.</p>
+          <span class="res-link">Visiter le site <i class="bi bi-arrow-up-right"></i></span>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <a href="https://www.bbc.co.uk/learningenglish" target="_blank" class="res-card">
+          <div class="res-icon" style="background:#FDE8DF;color:var(--rust)"><i class="bi bi-broadcast"></i></div>
+          <h6>BBC Learning English</h6>
+          <p>Ressources audio, vidéo et textuelles de la BBC pour tous les niveaux. Excellent pour l'anglais authentique et l'actualité.</p>
+          <span class="res-link">Visiter le site <i class="bi bi-arrow-up-right"></i></span>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <a href="https://www.lingoda.com" target="_blank" class="res-card">
+          <div class="res-icon" style="background:#E8EFF9;color:#3A5FA0"><i class="bi bi-camera-video-fill"></i></div>
+          <h6>Lingoda</h6>
+          <p>Cours en ligne avec de vrais enseignants natifs, disponibles 24h/24. Idéal pour progresser rapidement avec un encadrement professionnel.</p>
+          <span class="res-link">Visiter le site <i class="bi bi-arrow-up-right"></i></span>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <a href="https://www.italki.com" target="_blank" class="res-card">
+          <div class="res-icon" style="background:#F5ECD7;color:#8A6530"><i class="bi bi-people-fill"></i></div>
+          <h6>iTalki</h6>
+          <p>Trouvez un professeur particulier ou un partenaire d'échange linguistique parmi des milliers de locuteurs natifs.</p>
+          <span class="res-link">Visiter le site <i class="bi bi-arrow-up-right"></i></span>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <a href="https://www.deepl.com" target="_blank" class="res-card">
+          <div class="res-icon" style="background:#EAF2E3;color:var(--sage)"><i class="bi bi-translate"></i></div>
+          <h6>DeepL Traducteur</h6>
+          <p>Le traducteur le plus précis du marché, avec suggestions de formulations alternatives et nuances contextuelles.</p>
+          <span class="res-link">Visiter le site <i class="bi bi-arrow-up-right"></i></span>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <a href="https://www.anki.ichi2.net" target="_blank" class="res-card">
+          <div class="res-icon" style="background:#FDE8DF;color:var(--rust)"><i class="bi bi-card-text"></i></div>
+          <h6>Anki</h6>
+          <p>Logiciel de flashcards avec algorithme de répétition espacée. Mémorisez du vocabulaire de manière scientifiquement prouvée.</p>
+          <span class="res-link">Visiter le site <i class="bi bi-arrow-up-right"></i></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <hr style="border-color:var(--border); margin: 3rem 0;"/>
+
+  <!-- ═══ TÉLÉCHARGEMENTS ═══ -->
+  <section id="telechargements" class="reveal">
+    <span class="section-label">04 — Documents</span>
+    <h2 class="section-title">Téléchargements</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Fiches de vocabulaire, tableaux de conjugaison et guides de prononciation à télécharger et imprimer.</p>
+
+    <div class="row g-3">
+      <div class="col-12">
+        <div class="dl-card">
+          <div class="dl-icon"><i class="bi bi-file-earmark-pdf"></i></div>
+          <div class="dl-info">
+            <h6>Fiche vocabulaire — Les 500 mots essentiels (Anglais)</h6>
+            <small>PDF · 2 pages · 340 Ko · Niveau A1–B2</small>
+          </div>
+          <a href="#" class="dl-btn"><i class="bi bi-download"></i><span>Télécharger</span></a>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="dl-card">
+          <div class="dl-icon"><i class="bi bi-file-earmark-word"></i></div>
+          <div class="dl-info">
+            <h6>Tableau de conjugaison — Verbes irréguliers anglais</h6>
+            <small>DOCX · 4 pages · 185 Ko · Niveau A2–C1</small>
+          </div>
+          <a href="#" class="dl-btn"><i class="bi bi-download"></i><span>Télécharger</span></a>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="dl-card">
+          <div class="dl-icon"><i class="bi bi-file-earmark-pdf"></i></div>
+          <div class="dl-info">
+            <h6>Guide de prononciation — Alphabet phonétique international (API)</h6>
+            <small>PDF · 6 pages · 520 Ko · Tous niveaux</small>
+          </div>
+          <a href="#" class="dl-btn"><i class="bi bi-download"></i><span>Télécharger</span></a>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="dl-card">
+          <div class="dl-icon"><i class="bi bi-file-earmark-slides"></i></div>
+          <div class="dl-info">
+            <h6>Présentation — Les temps verbaux en anglais (Schéma visuel)</h6>
+            <small>PPTX · 12 diapositives · 1.2 Mo · Niveau B1–C1</small>
+          </div>
+          <a href="#" class="dl-btn"><i class="bi bi-download"></i><span>Télécharger</span></a>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="dl-card">
+          <div class="dl-icon"><i class="bi bi-file-earmark-pdf"></i></div>
+          <div class="dl-info">
+            <h6>Pack vocabulaire thématique — Voyages & Transports (Espagnol)</h6>
+            <small>PDF · 3 pages · 290 Ko · Niveau A2–B1</small>
+          </div>
+          <a href="#" class="dl-btn"><i class="bi bi-download"></i><span>Télécharger</span></a>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="dl-card">
+          <div class="dl-icon"><i class="bi bi-file-earmark-zip"></i></div>
+          <div class="dl-info">
+            <h6>Pack complet Débutant — Exercices + Corrections (Allemand)</h6>
+            <small>ZIP · 18 fichiers · 4.7 Mo · Niveau A1–A2</small>
+          </div>
+          <a href="#" class="dl-btn"><i class="bi bi-download"></i><span>Télécharger</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /container -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="brand mb-2">Lingua<span>Hub</span></div>
+        <p>Une compilation soigneusement sélectionnée de ressources pour les apprenants de toutes les langues, tous niveaux confondus.</p>
+      </div>
+      <div class="col-6 col-lg-2">
+        <h6>Navigation</h6>
+        <a href="#vocabulaire">Vocabulaire</a>
+        <a href="#grammaire">Grammaire</a>
+        <a href="#ressources">Ressources</a>
+        <a href="#telechargements">Téléchargements</a>
+      </div>
+      <div class="col-6 col-lg-2">
+        <h6>Langues</h6>
+        <a href="#">Anglais</a>
+        <a href="#">Espagnol</a>
+        <a href="#">Allemand</a>
+        <a href="#">Italien</a>
+        <a href="#">Japonais</a>
+      </div>
+      <div class="col-lg-4">
+        <h6>Niveaux CECRL</h6>
+        <div class="d-flex flex-wrap gap-2">
+          <span style="background:rgba(255,255,255,.07);color:var(--sand);font-size:.75rem;padding:.25rem .7rem;border-radius:3px;">A1 Découverte</span>
+          <span style="background:rgba(255,255,255,.07);color:var(--sand);font-size:.75rem;padding:.25rem .7rem;border-radius:3px;">A2 Survie</span>
+          <span style="background:rgba(255,255,255,.07);color:var(--sand);font-size:.75rem;padding:.25rem .7rem;border-radius:3px;">B1 Seuil</span>
+          <span style="background:rgba(255,255,255,.07);color:var(--sand);font-size:.75rem;padding:.25rem .7rem;border-radius:3px;">B2 Avancé</span>
+          <span style="background:rgba(255,255,255,.07);color:var(--sand);font-size:.75rem;padding:.25rem .7rem;border-radius:3px;">C1 Autonome</span>
+          <span style="background:rgba(255,255,255,.07);color:var(--sand);font-size:.75rem;padding:.25rem .7rem;border-radius:3px;">C2 Maîtrise</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <span>© 2025 LinguaHub — Ressources pédagogiques libres</span>
+      <span>Fait avec <i class="bi bi-heart-fill" style="color:var(--rust)"></i> pour les apprenants</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Lang tab switcher
+  function switchLang(btn, code) {
+    document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.lang-content').forEach(c => c.classList.add('d-none'));
+    document.getElementById('vocab-' + code).classList.remove('d-none');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>
